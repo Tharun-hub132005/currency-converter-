@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Currency Converter</title>
+    <!-- Tailwind CSS CDN for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Configure Tailwind CSS to use 'Inter' font
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom styles for better aesthetics and responsiveness */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8; /* Light blue-gray background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 1rem; /* Add some padding for smaller screens */
+            box-sizing: border-box;
+        }
+        .converter-container {
+            background-color: #ffffff;
+            border-radius: 1.5rem; /* More rounded corners */
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            padding: 2.5rem; /* Increased padding */
+            max-width: 500px; /* Max width for desktop */
+            width: 100%; /* Full width on smaller screens */
+            box-sizing: border-box;
+        }
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+        .input-group label {
+            display: block;
+            font-weight: 600;
+            color: #374151; /* Darker text for labels */
+            margin-bottom: 0.5rem;
+        }
+        .input-field, .select-field {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid #d1d5db; /* Light gray border */
+            border-radius: 0.75rem; /* Rounded input fields */
+            font-size: 1rem;
+            color: #1f2937; /* Dark text for input */
+            transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .input-field:focus, .select-field:focus {
+            outline: none;
+            border-color: #4f46e5; /* Indigo focus border */
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.5); /* Indigo focus shadow */
+        }
+        .convert-button {
+            width: 100%;
+            padding: 0.85rem 1.5rem;
+            background-color: #4f46e5; /* Indigo button */
+            color: white;
+            font-weight: 700;
+            border-radius: 0.75rem;
+            border: none;
+            cursor: pointer;
+            font-size: 1.125rem;
+            transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .convert-button:hover {
+            background-color: #4338ca; /* Darker indigo on hover */
+            transform: translateY(-1px); /* Slight lift effect */
+        }
+        .convert-button:active {
+            transform: translateY(0); /* Press effect */
+            box-shadow: none;
+        }
+        .result-area {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background-color: #e0e7ff; /* Lighter indigo background for result */
+            border-radius: 0.75rem;
+            text-align: center;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #374151;
+            min-height: 4rem; /* Ensure consistent height */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            word-break: break-word; /* Break long results */
+        }
+        .error-message {
+            color: #ef4444; /* Red for error messages */
+            font-weight: 500;
+            text-align: center;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
+    <div class="converter-container">
+        <h1 class="text-3xl font-extrabold text-center text-gray-800 mb-8">Currency Converter</h1>
+
+        <div class="input-group">
+            <label for="amount">Amount:</label>
+            <input type="number" id="amount" class="input-field" placeholder="Enter amount" value="1.00">
+        </div>
+
+        <div class="input-group">
+            <label for="fromCurrency">From Currency:</label>
+            <select id="fromCurrency" class="select-field">
+                <option value="USD">USD - United States Dollar</option>
+                <option value="EUR">EUR - Euro</option>
+                <option value="GBP">GBP - British Pound</option>
+                <option value="JPY">JPY - Japanese Yen</option>
+                <option value="CAD">CAD - Canadian Dollar</option>
+                <option value="AUD">AUD - Australian Dollar</option>
+                <option value="CHF">CHF - Swiss Franc</option>
+                <option value="CNY">CNY - Chinese Yuan</option>
+                <option value="INR" selected>INR - Indian Rupee</option>
+                <option value="BRL">BRL - Brazilian Real</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label for="toCurrency">To Currency:</label>
+            <select id="toCurrency" class="select-field">
+                <option value="USD" selected>USD - United States Dollar</option>
+                <option value="EUR">EUR - Euro</option>
+                <option value="GBP">GBP - British Pound</option>
+                <option value="JPY">JPY - Japanese Yen</option>
+                <option value="CAD">CAD - Canadian Dollar</option>
+                <option value="AUD">AUD - Australian Dollar</option>
+                <option value="CHF">CHF - Swiss Franc</option>
+                <option value="CNY">CNY - Chinese Yuan</option>
+                <option value="INR">INR - Indian Rupee</option>
+                <option value="BRL">BRL - Brazilian Real</option>
+            </select>
+        </div>
+
+        <button id="convertBtn" class="convert-button">Convert</button>
+
+        <div id="result" class="result-area">
+            Enter values and click Convert
+        </div>
+        <div id="errorMessage" class="error-message hidden"></div>
+    </div>
+
+    <script>
+        // Exchange rates relative to USD (as a base for simplicity)
+        // In a real application, these would be fetched from a reliable API.
+        const exchangeRates = {
+            "USD": 1.0,  // Base currency
+            "EUR": 0.92,
+            "GBP": 0.79,
+            "JPY": 156.90,
+            "CAD": 1.37,
+            "AUD": 1.50,
+            "CHF": 0.90,
+            "CNY": 7.26,
+            "INR": 83.50,
+            "BRL": 5.40,
+        };
+
+        // Get references to HTML elements
+        const amountInput = document.getElementById('amount');
+        const fromCurrencySelect = document.getElementById('fromCurrency');
+        const toCurrencySelect = document.getElementById('toCurrency');
+        const convertButton = document.getElementById('convertBtn');
+        const resultDiv = document.getElementById('result');
+        const errorMessageDiv = document.getElementById('errorMessage');
+
+        // Function to display error messages
+        function displayError(message) {
+            errorMessageDiv.textContent = message;
+            errorMessageDiv.classList.remove('hidden');
+            resultDiv.textContent = ''; // Clear result when there's an error
+        }
+
+        // Function to clear error messages
+        function clearError() {
+            errorMessageDiv.textContent = '';
+            errorMessageDiv.classList.add('hidden');
+        }
+
+        // Function to perform the currency conversion
+        function convertCurrency() {
+            clearError(); // Clear any previous errors
+
+            const amount = parseFloat(amountInput.value);
+            const fromCurrency = fromCurrencySelect.value;
+            const toCurrency = toCurrencySelect.value;
+
+            // Input validation
+            if (isNaN(amount) || amount <= 0) {
+                displayError("Please enter a valid positive number for the amount.");
+                return;
+            }
+
+            if (fromCurrency === toCurrency) {
+                resultDiv.textContent = `${amount.toFixed(2)} ${fromCurrency} = ${amount.toFixed(2)} ${toCurrency}`;
+                return;
+            }
+
+            // Conditional logic for conversion
+            const fromRate = exchangeRates[fromCurrency];
+            const toRate = exchangeRates[toCurrency];
+
+            if (fromRate === undefined || toRate === undefined) {
+                displayError("Selected currency not found in exchange rates. Please choose valid currencies.");
+                return;
+            }
+
+            // Convert 'from' currency to USD base, then from USD base to 'to' currency
+            const amountInUSD = amount / fromRate;
+            const convertedAmount = amountInUSD * toRate;
+
+            // Display the result, formatted to 2 decimal places
+            resultDiv.textContent = `${amount.toFixed(2)} ${fromCurrency} = ${convertedAmount.toFixed(2)} ${toCurrency}`;
+        }
+
+        // Add event listener to the convert button
+        convertButton.addEventListener('click', convertCurrency);
+
+        // Optional: Perform conversion on Enter key press in amount field
+        amountInput.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                convertCurrency();
+            }
+        });
+
+        // Initial conversion on page load with default values
+        document.addEventListener('DOMContentLoaded', convertCurrency);
+    </script>
+</body>
+</html>
