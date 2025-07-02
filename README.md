@@ -14,7 +14,7 @@
 * A div to display the Result.
 * A div for errorMessage to provide user feedback.
 
-# Tailwind CSS:
+## Tailwind CSS:
 
 * The tailwind.config block is included directly in the <script> tag in the <head> to ensure the 'Inter' font is used globally.
 
@@ -24,7 +24,7 @@
 
 * The design is responsive, adapting to different screen sizes.
 
-# JavaScript Logic (<script> tag at the end of <body>):
+## JavaScript Logic (<script> tag at the end of <body>):
 
 * exchangeRates Object: This is a crucial part. For demonstration purposes, I've hardcoded a set of exchange rates relative to USD. In a real-world application, you would fetch these rates dynamically from a reliable currency exchange API (e.g., ExchangeRate-API, Open Exchange Rates, etc.).
 
@@ -40,7 +40,7 @@
 
 * Same Currency Check: If the "From" and "To" currencies are the same, it simply displays the same amount.
 
-# Conversion Calculation:
+## Conversion Calculation:
 
 * It retrieves the exchange rates for the selected "From" and "To" currencies from the exchangeRates object.
 
@@ -50,7 +50,7 @@
 
 * Display Result: The calculated convertedAmount is then formatted to two decimal places and displayed in the resultDiv.
 
-# Event Listeners:
+## Event Listeners:
 
 * convertButton.addEventListener('click', convertCurrency);: Triggers the convertCurrency function when the button is clicked.
 
