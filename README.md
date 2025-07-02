@@ -8,15 +8,10 @@
 # HTML Structure:
 
 * It's a single HTML file containing all the necessary code.
-
 * Input field for the Amount.
-
 * Two dropdown (<select>) elements for From Currency and To Currency. I've pre-populated these with common currencies.
-
 * A "Convert" button.
-
 * A div to display the Result.
-
 * A div for errorMessage to provide user feedback.
 
 # Tailwind CSS:
